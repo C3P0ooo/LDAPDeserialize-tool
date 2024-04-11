@@ -15,7 +15,7 @@ import java.net.URL;
 
 public  class SerialOperationInterceptor extends InMemoryOperationInterceptor {
 
-    private byte[] gadget;
+    private byte[] gadget =null;
     private String classUrl = "";
     private boolean isString = true;
 
