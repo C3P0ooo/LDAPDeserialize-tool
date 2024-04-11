@@ -1,23 +1,13 @@
 package org.gadget;
 
-import com.alibaba.fastjson.JSONArray;
 import com.fasterxml.jackson.databind.node.POJONode;
 import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
-import org.apache.commons.collections.Transformer;
-import org.apache.commons.collections.functors.ChainedTransformer;
-import org.apache.commons.collections.functors.ConstantTransformer;
-import org.apache.commons.collections.functors.InvokerTransformer;
-import org.apache.commons.collections.keyvalue.TiedMapEntry;
-import org.apache.commons.collections.map.LazyMap;
 import org.util.TemplateUtils;
 
 import javax.management.BadAttributeValueExpException;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
 
 public class Jackson {
     public static byte[] getBytes(String common) throws Exception {
