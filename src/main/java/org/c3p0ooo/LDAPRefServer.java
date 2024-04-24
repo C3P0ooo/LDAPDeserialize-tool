@@ -82,7 +82,7 @@ public class LDAPRefServer {
             Gadget gadget = null;
             switch (gadgetName){
                 case "fastjson":
-                    gadget = new CC4();
+                    gadget = new Fastjson();
                     break;
                 case "CC6":
                     gadget = new CC6();
@@ -91,7 +91,7 @@ public class LDAPRefServer {
                     gadget = new Jackson();
                     break;
                 case "CC4":
-                    gadget = new Fastjson();
+                    gadget = new CC4();
                     break;
                 default:
                     System.out.println("暂不支持该链！");
