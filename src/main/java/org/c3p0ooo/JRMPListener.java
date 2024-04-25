@@ -41,8 +41,9 @@ public class JRMPListener implements Runnable {
             NumberFormatException, IOException {
         this.port = port;
         this.payloadObject = payloadObject;
-        this.ss =
-                ServerSocketFactory.getDefault().createServerSocket(this.port);
+        this.ss = ServerSocketFactory.getDefault().createServerSocket(this.port);
+        System.out.println("Listening on 0.0.0.0:" + port);
+
     }
 
     public JRMPListener(int port, String className, URL classpathUrl) throws
