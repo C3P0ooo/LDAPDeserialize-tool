@@ -99,6 +99,9 @@ public class LDAPRefServer {
                 case "groovy":
                     gadget = new Groovy();
                     break;
+                case "hibernate":
+                    gadget = new Hibernate_ClassPathXmlApplicationContextExec();
+                    break;
                 default:
                     System.out.println("暂不支持该链！");
                     System.exit(0);
