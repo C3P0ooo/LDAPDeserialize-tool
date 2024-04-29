@@ -8,8 +8,6 @@ import sun.rmi.server.UnicastServerRef;
 import javax.naming.StringRefAddr;
 import java.lang.reflect.Field;
 import java.rmi.server.RemoteObject;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ExecAll implements Gadget {
 
