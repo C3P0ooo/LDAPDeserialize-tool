@@ -11,4 +11,16 @@ public class GadgetUtils {
         new ObjectOutputStream(byteArrayOutputStream).writeObject(obj.getObject(command));
         return byteArrayOutputStream.toByteArray();
     }
+
+    public static Object getRefObj(String classname) throws Exception {
+        Class<?> aClass = Class.forName(classname);
+        Object obj = aClass.getConstructor().newInstance();
+        return obj;
+    }
+
+    public static Object getRefObj(String classname, Class[] cls,Object[] args) throws Exception {
+        Class<?> aClass = Class.forName(classname);
+        Object obj = aClass.getConstructor(cls).newInstance(args);
+        return obj;
+    }
 }

@@ -16,6 +16,8 @@ import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 /**
@@ -40,6 +42,7 @@ public class JRMPListener implements Runnable {
     private URL classpathUrl;
     private String cmd = "";
     private String gadgatName = "";
+    private final Lock lock = new ReentrantLock();
 
 
     public JRMPListener(int port, Object payloadObject, String cmd , String gadgatName) throws
@@ -201,8 +204,14 @@ public class JRMPListener implements Runnable {
 
         switch (op) {
             case TransportConstants.Call:
-                // service incoming RMI call
-                doCall(in, out, payload);
+                //加锁，防止payload被覆盖
+                lock.lock();
+                try {
+                    // service incoming RMI call
+                    doCall(in, out, payload);
+                }finally {
+                    lock.unlock();
+                }
                 break;
 
             case TransportConstants.Ping:
@@ -280,7 +289,6 @@ public class JRMPListener implements Runnable {
 
         new UID().write(oos);
 
-        //
         oos.writeObject(payload);
 
         oos.flush();

