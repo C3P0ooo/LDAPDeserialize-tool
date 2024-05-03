@@ -14,6 +14,9 @@ public class ArgsBean {
         map.put("CC4", "CC4");
         map.put("CC6", "CC6");
         map.put("hibernate", "Hibernate_ClassPathXmlApplicationContextExec");
+        map.put("CB192","CB192");
+        map.put("CB183","CB183");
+        map.put("rome","Rome");
         map.put("execAll", "ExecAll");
     }
 
