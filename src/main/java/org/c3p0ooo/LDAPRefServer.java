@@ -133,7 +133,7 @@ public class LDAPRefServer {
                             "[hibernate为ClassPathXmlApplicationContext执行，'-c'后跟上xml文件WEB地址]\n" +
                             "CB192 (依赖：commons-beanutils 1.9.2 && commons-logging 1.2)\n" +
                             "CB183 (依赖：commons-beanutils 1.8.3 && commons-logging 1.2)\n" +
-                            "rome (依赖：Rome 1.0)" +
+                            "rome (依赖：Rome 1.0)\n" +
                             "execAll (利用链遍历，跑完一次要重新开脚本，依赖：tomcat)" +
                             "\n\n\n"
                     , options);
