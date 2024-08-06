@@ -21,7 +21,7 @@ public class Fastjson implements Gadget {
         field.set(bd, jsonArray);
 
         HashMap hashMap = new HashMap();
-        hashMap.put(template,bd);
+        hashMap.put(template, bd);
 
         return hashMap;
     }

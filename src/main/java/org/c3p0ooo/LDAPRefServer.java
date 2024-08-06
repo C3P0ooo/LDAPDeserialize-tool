@@ -31,6 +31,7 @@ public class LDAPRefServer {
         options.addOption("c", "cmd", true, "使用内置反序列化链时所要执行的命令（存在空格时请使用双引号包裹）");
         options.addOption("rmi", "rmi", false, "rmi反序列化打法，可打JDK20+，只支持内置链打法");
         options.addOption("ip", "ip", true, "VPS-IP地址");
+//        options.addOption("m", "m", true, "内存马：暂时默认加入servlet内存马");更改内存马加入方式
 
 
         // 创建命令行解析器
@@ -140,7 +141,9 @@ public class LDAPRefServer {
         }
     }
 
+    public static void setMemShell(){
 
+    }
 
     public static void lanuchLDAPServer(Integer ldap_port, Object obj) throws Exception {
         try {

@@ -63,10 +63,11 @@
             <version>2.13.3</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.javassist/javassist -->
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.19.0-GA</version>
+            <version>3.30.2-GA</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-dbcp -->
         <dependency>
