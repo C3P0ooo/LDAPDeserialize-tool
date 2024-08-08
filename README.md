@@ -100,3 +100,5 @@ TomcatListenerCMD （tomcat listener cmd马，http://ip:port/xx/zz?pass=aaa&cmd=
 ### Star
 
 [![恒星历史图表](https://api.star-history.com/svg?repos=C3P0ooo/LDAPDeserialize-tool&type=Timeline)](https://star-history.com/#C3P0ooo/LDAPDeserialize-tool&Timeline)
+
+![GitHub lerna version](https://img.shields.io/github/lerna-json/v/:user/:repo)

