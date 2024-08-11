@@ -51,8 +51,10 @@ execAll (利用链遍历，跑完一次要重新开脚本，依赖：tomcat)
 
 【目前支持的内存马类型】
 目前所有内存马默认密码均为：aaa
+【Tomcat目前兼容Tomcat8,9】
+TomcatListenerBehinder (冰蝎4.1默认马子)
 TomcatListenerBehinderByLei (tomcat listener冰蝎马，打入改版的马子，需用改版的冰蝎ByLei)
-TomcatListenerCMD （tomcat listener cmd马，http://ip:port/xx/zz?pass=aaa&cmd=whoami）
+TomcatListenerCMD (tomcat listener cmd马，http://ip:port/xx/zz?pass=aaa&cmd=whoami)
 ```
 
 ### 使用演示

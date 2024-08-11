@@ -8,6 +8,7 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.NotFoundException;
+import org.memshell.TomcatListenerBehinder;
 import org.memshell.TomcatListenerBehinderByLei;
 import org.memshell.TomcatListenerCMD;
 
@@ -70,6 +71,8 @@ public class TemplateUtils {
             // TomcatListenerCMD
             case "TomcatListenerCMD":
                 return TomcatListenerCMD.generateListenerMemShell();
+            case "TomcatListenerBehinder":
+                return TomcatListenerBehinder.generateListenerMemShell();
             // 返回一个空的class,用于实现无需AbstractTranslet的打法
             case "NullClass":
                 return nullClass();

@@ -1,0 +1,4 @@
+### 1.2.2 更新日志
+增加Tomcat Listener内存马功能
+包含TomcatListenerCMD马、TomcatListener原版冰蝎马，TomcatListenerBehinderByLei改版冰蝎马
+兼容Tomcat8\9
