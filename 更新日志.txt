@@ -1,4 +1,4 @@
-### 1.2.3 更新日志
+### 1.3.1 更新日志
 #### 增加Resin内存马功能
 包含ResinListenerBehinder(冰蝎4.1)、ResinListenerCMD内存马
 #### 增加Spring内存马功能
@@ -7,7 +7,7 @@
 或不指定具体路径，此时会生成一个随机路径
 #### 输出内容优化
 
-### 1.2.2 更新日志
+### 1.3.0 更新日志
 增加Tomcat Listener内存马功能
 包含TomcatListenerCMD马、TomcatListener原版冰蝎马，TomcatListenerBehinderByLei改版冰蝎马
 兼容Tomcat8\9
