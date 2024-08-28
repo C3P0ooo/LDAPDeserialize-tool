@@ -15,6 +15,12 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.6.13</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-catalina -->
         <!-- for LDAP bypass -->
         <dependency>
@@ -132,6 +138,13 @@
             <groupId>com.nqzero</groupId>
             <artifactId>permit-reflect</artifactId>
             <version>0.4</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.caucho/resin -->
+        <dependency>
+            <groupId>com.caucho</groupId>
+            <artifactId>resin</artifactId>
+            <version>4.0.59</version>
         </dependency>
 
     </dependencies>

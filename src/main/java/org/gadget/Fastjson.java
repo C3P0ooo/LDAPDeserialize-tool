@@ -10,8 +10,8 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 
 public class Fastjson implements Gadget {
-    public Object getObject(String common) throws Exception {
-        TemplatesImpl template = TemplateUtils.getTemplate(common);
+    public Object getObject(String common,String path) throws Exception {
+        TemplatesImpl template = TemplateUtils.getTemplate(common,path);
         JSONArray jsonArray = new JSONArray();
         jsonArray.add(template);
 

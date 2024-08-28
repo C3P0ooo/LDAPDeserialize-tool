@@ -39,7 +39,7 @@ public class ExecAll implements Gadget {
 //        }
 //    }
     @Override
-    public Object getObject(String command) throws Exception {
+    public Object getObject(String command,String path) throws Exception {
 
 
         ReferenceWrapper referenceWrapper = new ReferenceWrapper(ref);

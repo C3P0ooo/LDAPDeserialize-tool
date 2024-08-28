@@ -29,6 +29,7 @@ java -jar LDAPDeserialize-tool.jar -p 1389 -g fastjson -c TomcatListenerBehinder
  -g,--gadget <arg>   内置反序列化链
  -ip,--ip <arg>      VPS-IP地址
  -p,--port <arg>     监听的端口，默认1389
+ -path <arg>         内存马路径,格式为/xxx,不传入会生成一个随机地址,listener型内存马不需要
  -rmi,--rmi          rmi反序列化打法，可打JDK20+，只支持内置链打法
 ```
 #### 支持说明
@@ -55,6 +56,9 @@ execAll (利用链遍历，跑完一次要重新开脚本，依赖：tomcat)
 TomcatListenerBehinder (冰蝎4.1默认马子)
 TomcatListenerBehinderByLei (tomcat listener冰蝎马，打入改版的马子，需用改版的冰蝎ByLei)
 TomcatListenerCMD (tomcat listener cmd马，http://ip:port/xx/zz?pass=aaa&cmd=whoami)
+ResinListenerCMD (Resin listener型CMD内存马)
+ResinListenerBehinder (Resin listener型冰蝎4.1内存马)
+SpringInterceptorBehinder (Spring Interceptor型冰蝎4.1内存马)
 ```
 
 ### 使用演示
@@ -95,9 +99,13 @@ TomcatListenerCMD (tomcat listener cmd马，http://ip:port/xx/zz?pass=aaa&cmd=wh
 ![截图](image/Snipaste_2024-08-06_15-43-51.png)
 
 ![截图](image/Snipaste_2024-08-06_15-45-48.png)
+###### 指定路径
+![](image/Snipaste_2024-08-28_23-26-00.png)
+![](image/Snipaste_2024-08-28_23-28-04.png)
 
 ### TODO
 - 增加内存马类型及兼容性
+- 增加注入Suo5内存马
 
 ### Star
 
