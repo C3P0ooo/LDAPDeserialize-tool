@@ -105,7 +105,6 @@ SpringInterceptorBehinder (Spring Interceptor型冰蝎4.1内存马)
 
 ### TODO
 - 增加内存马类型及兼容性
-- 增加注入Suo5内存马
 
 ### Star
 
