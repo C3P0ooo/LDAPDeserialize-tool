@@ -103,6 +103,13 @@ SpringInterceptorBehinder (Spring Interceptor型冰蝎4.1内存马)
 ![](image/Snipaste_2024-08-28_23-26-00.png)
 ![](image/Snipaste_2024-08-28_23-28-04.png)
 
+###### 若依JNDI注入内存马
+![](image/Snipaste_2024-09-11_18-25-08.png)
+![Snipaste_2024-09-11_18-26-44.png](image%2FSnipaste_2024-09-11_18-26-44.png)
+执行该计划任务
+![Snipaste_2024-09-11_18-27-42.png](image%2FSnipaste_2024-09-11_18-27-42.png)
+![Snipaste_2024-09-11_18-28-21.png](image%2FSnipaste_2024-09-11_18-28-21.png)
+
 ### TODO
 - 增加内存马类型及兼容性
 

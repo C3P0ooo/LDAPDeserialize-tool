@@ -157,6 +157,7 @@ public class LDAPRefServer {
                             "ResinListenerCMD (Resin listener型CMD内存马)\n" +
                             "ResinListenerBehinder (Resin listener型冰蝎4.1内存马)\n" +
                             "SpringInterceptorBehinder (Spring Interceptor型冰蝎4.1内存马)\n" +
+                            "RuoYiSpringInterceptorBehinder (针对若依的Spring Interceptor型冰蝎4.1内存马)" +
                             "\n"
                     , options);
         }

