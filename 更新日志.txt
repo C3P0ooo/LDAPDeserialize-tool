@@ -3,6 +3,9 @@
 解决RuoYi JNDI无法注入内存马问题
     若依计划任务起了新的线程，无法使用RequestContextHolder获取WebApplicationContext,改换使用LiveBeansView
     若依是Spring和Spring-Shiro组合使用，其中拦截器preHandle接收的参数运行类型为ShiroHttpServletRequest
+解决SpringBoot+SpringSecurity组合使用时传入request的运行类型不是RequestFacade
+    SpringBoot+SpringSecurity组合使用时，其中拦截器preHandle接收的参数运行类型为org.springframework.security.web.servletapi.HttpServlet3RequestFactory$Servlet3SecurityContextHolderAwareRequestWrapper
+
 
 ### 1.3.1 更新日志
 #### 增加Resin内存马功能
